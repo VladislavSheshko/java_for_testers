@@ -6,6 +6,15 @@ public record Triangle(
         double c
 ) {
 
+    public Triangle{
+        if (a <= 0 || b <= 0 || c <= 0) {
+            throw new IllegalArgumentException("Стороны треугольника должны быть > 0");
+        }
+        if (a + b <= c || b + c <= a || a + c <= b) {
+            throw new IllegalArgumentException("Нарушено неравенство треугольника");
+        }
+    }
+
     public static void printTriangleArea(Triangle t) {
         System.out.println("Площадь треугольника = " + t.area());
     }

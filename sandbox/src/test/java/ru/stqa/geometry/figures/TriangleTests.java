@@ -15,4 +15,24 @@ public class TriangleTests {
     void calCalculatePerimeter(){
         Assertions.assertEquals(21, new Triangle(5,7,9).perimeter());
     }
+
+    @Test
+    void cannotCreateTriangleWithNegativeSide(){
+        try{
+            new Triangle(-5,7,-9);
+            Assertions.fail();
+        }catch (IllegalArgumentException exception){
+         // ОК
+        }
+    }
+
+    @Test
+    void cannotCreateTriangleWithBrokenInequality(){
+        try{
+            new Triangle(1, 2, 4);  // 1+2=3 <4 → нарушение
+            Assertions.fail();
+        }catch (IllegalArgumentException exception){
+            // ОК
+        }
+    }
 }
