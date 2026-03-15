@@ -1,25 +1,29 @@
 package ru.stqa.geometry.figures;
 
-public class Triangle {
+public record Triangle(
+        double a,
+        double b,
+        double c
+) {
 
-    public static void printTriangleArea(double a, double b, double c) {
-        System.out.println("Площадь треугольника = " + triangleArea(a, b, c));
+    public static void printTriangleArea(Triangle t) {
+        System.out.println("Площадь треугольника = " + t.area());
     }
 
-    public static double triangleArea(double a, double b, double c) {
+    public  double area() {
         // Вычисление полупериметра
-        double p = (a + b + c) / 2.0;
+        double p = (this.a + this.b + this.c) / 2.0;
         // Формула Герона: S = sqrt(p * (p - a) * (p - b) * (p - c)) и округляем до 2х знаков после запятой
-        return Math.round(Math.sqrt(p * (p - a) * (p - b) * (p - c)) * 100.0) / 100.0;
+        return Math.round(Math.sqrt(p * (p - this.a) * (p - this.b) * (p - this.c)) * 100.0) / 100.0;
     }
 
 
-    public static void printTrianglePerimeter(double a, double b, double c) {
-        System.out.println("Периметр треугольника = " + trianglePerimeter(a, b, c));
+    public static void printTrianglePerimeter(Triangle t) {
+        System.out.println("Периметр треугольника = " + t.perimeter());
     }
 
-    public static double trianglePerimeter(double a, double b, double c) {
+    public double perimeter() {
         // Вычисление периметра
-        return a + b + c;
+        return this.a + this.b + this.c;
     }
 }
