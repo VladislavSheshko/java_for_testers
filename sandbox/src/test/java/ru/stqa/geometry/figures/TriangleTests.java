@@ -56,4 +56,11 @@ public class TriangleTests {
         var t2 = new Triangle(4,5,3);
         Assertions.assertEquals(t1, t2);
     }
+
+    @Test
+    void testEquality4(){
+        var triangle = new Triangle(2, 3, 4);
+        var triangle1 = new Triangle(2, 4, 3);
+        Assertions.assertEquals(triangle, triangle1);
+    }
 }
