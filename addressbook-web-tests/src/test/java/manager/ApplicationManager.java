@@ -9,9 +9,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class ApplicationManager {
 
     protected WebDriver driver;
-
     private LoginHelper session;
     private GroupHelper groups;
+    private ContactHelper contact;
 
     public void init() {
         //Если переменная не проинициализирована - выполнить код по инициализации
@@ -37,6 +37,13 @@ public class ApplicationManager {
             groups = new GroupHelper(this);
         }
         return groups;
+    }
+
+    public ContactHelper contact() {
+        if (contact == null) {
+            contact = new ContactHelper(this);
+        }
+        return contact;
     }
 
     protected boolean isElementPresent(By locator) {
