@@ -1,6 +1,7 @@
 package manager;
 
 import model.ContactData;
+import model.GroupData;
 import org.openqa.selenium.By;
 
 public class ContactHelper extends HelperBase {
@@ -11,13 +12,13 @@ public class ContactHelper extends HelperBase {
 
     public void openHomePage() {
         if (!manager.isElementPresent(By.xpath("//span[contains(text(), 'Number of results')]"))) {
-            manager.driver.findElement(By.linkText("home")).click();
+            click(By.linkText("home"));
         }
     }
 
     public void openContactCreation() {
         if (!manager.isElementPresent(By.name("theform"))) {
-            manager.driver.findElement(By.linkText("add new")).click();
+            initContactCreation();
         }
     }
 
@@ -28,21 +29,62 @@ public class ContactHelper extends HelperBase {
 
     public void createContact(ContactData contact) {
         openContactCreation();
-        manager.driver.findElement(By.linkText("add new")).click();
-        manager.driver.findElement(By.name("firstname")).sendKeys(contact.firstname());
-        manager.driver.findElement(By.name("lastname")).sendKeys(contact.lastname());
-        manager.driver.findElement(By.name("address")).sendKeys(contact.address());
-        manager.driver.findElement(By.name("mobile")).sendKeys(contact.mobile());
-        manager.driver.findElement(By.name("work")).sendKeys(contact.work());
-        manager.driver.findElement(By.name("email")).sendKeys(contact.email());
+        initContactCreation();
+        fillContactForm(contact);
+        submitContactCreation();
+        returnToContactPage();
+    }
+
+    private void submitContactCreation() {
         manager.driver.findElement(By.cssSelector("input[value='Enter']")).click();
-        manager.driver.findElement(By.linkText("home page")).click();
+    }
+
+    private void initContactCreation() {
+        manager.driver.findElement(By.linkText("add new")).click();
     }
 
     public void removeContact() {
         openHomePage();
-        manager.driver.findElement(By.name("selected[]")).click();
-        manager.driver.findElement(By.name("delete")).click();
+        selectContact();
+        removeSelectedContact();
+        returnToContactPage();
+    }
+
+    private void removeSelectedContact() {
+        click(By.name("delete"));
+    }
+
+    public void modifyContact(ContactData modifiedContact) {
+        openHomePage();
+        selectContact();
+        initGroupModification();
+        fillContactForm(modifiedContact);
+        submitContactModification();
+        returnToContactPage();
+    }
+
+    private void selectContact() {
+        click(By.name("selected[]"));
+    }
+
+    private void returnToContactPage() {
         manager.driver.findElement(By.linkText("home page")).click();
+    }
+
+    private void submitContactModification() {
+        click(By.xpath("//div[@id='content']/form/input[20]"));
+    }
+
+    private void fillContactForm(ContactData contact) {
+        type(By.name("firstname"), contact.firstname());
+        type(By.name("lastname"), contact.lastname());
+        type(By.name("address"), contact.address());
+        type(By.name("mobile"), contact.mobile());
+        type(By.name("work"), contact.work());
+        type(By.name("email"), contact.email());
+    }
+
+    private void initGroupModification() {
+        click(By.xpath("//a[contains(@href,'edit.php')]"));
     }
 }
