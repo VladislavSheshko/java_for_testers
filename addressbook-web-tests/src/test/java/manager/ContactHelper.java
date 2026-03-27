@@ -54,6 +54,15 @@ public class ContactHelper extends HelperBase {
         click(By.name("delete"));
     }
 
+    private void fillContactForm(ContactData contact) {
+        type(By.name("firstname"), contact.firstname());
+        type(By.name("lastname"), contact.lastname());
+        type(By.name("address"), contact.address());
+        type(By.name("mobile"), contact.mobile());
+        type(By.name("work"), contact.work());
+        type(By.name("email"), contact.email());
+    }
+
     public void modifyContact(ContactData modifiedContact) {
         openHomePage();
         selectContact();
@@ -72,16 +81,7 @@ public class ContactHelper extends HelperBase {
     }
 
     private void submitContactModification() {
-        click(By.xpath("//div[@id='content']/form/input[20]"));
-    }
-
-    private void fillContactForm(ContactData contact) {
-        type(By.name("firstname"), contact.firstname());
-        type(By.name("lastname"), contact.lastname());
-        type(By.name("address"), contact.address());
-        type(By.name("mobile"), contact.mobile());
-        type(By.name("work"), contact.work());
-        type(By.name("email"), contact.email());
+        click(By.xpath("//input[@name='update']"));
     }
 
     private void initGroupModification() {
