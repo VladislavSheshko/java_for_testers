@@ -1,7 +1,6 @@
 package manager;
 
 import model.ContactData;
-import model.GroupData;
 import org.openqa.selenium.By;
 
 public class ContactHelper extends HelperBase {
@@ -66,7 +65,7 @@ public class ContactHelper extends HelperBase {
     public void modifyContact(ContactData modifiedContact) {
         openHomePage();
         selectContact();
-        initGroupModification();
+        initContactModification();
         fillContactForm(modifiedContact);
         submitContactModification();
         returnToContactPage();
@@ -84,7 +83,7 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//input[@name='update']"));
     }
 
-    private void initGroupModification() {
-        click(By.xpath("//a[contains(@href,'edit.php')]"));
+    private void initContactModification() {
+        click(By.xpath("//a[contains(@href,'edit.php?id=')]"));
     }
 }
