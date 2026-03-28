@@ -18,7 +18,11 @@ public class TestBase {
         }
     }
 
-    public String randomString(int n) {
+
+    //Разобраться почему у меня первая итерация возвращает элемент с пустым именем
+    //на первый взгляд же пустая строка только объявляется, а далее изменяется,
+    //но у меня почему-то с ней первый тест создается, понять причину
+    public static String randomString(int n) {
         var rnd = new Random();
         var result = "";
         for (int i = 0; i < n; i++) {
