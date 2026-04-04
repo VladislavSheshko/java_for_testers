@@ -75,6 +75,11 @@ public class ContactHelper extends HelperBase {
         click(By.name("selected[]"));
     }
 
+    public int getCount() {
+        openHomePage();
+        return manager.driver.findElements(By.name("selected[]")).size();
+    }
+
     private void returnToContactPage() {
         manager.driver.findElement(By.linkText("home page")).click();
     }
