@@ -36,6 +36,18 @@ public class GroupCreationTests extends TestBase {
         app.groups().createGroup(group);
         List<GroupData> newGroups = app.groups().getList();
         Assertions.assertEquals(oldGroups.size() + 1, newGroups.size());
+        GroupData createdGroup = null;
+        for (var g : newGroups) {
+            if (g.name().equals(group.name())) {
+                createdGroup = g;
+                break;
+            }
+        }
+        if (createdGroup == null) {
+            throw new AssertionError("Не найдена группа с именем: " + group.name());
+        }
+        // Проверяем, что имя совпадает с переданным
+        Assertions.assertEquals(group.name(), createdGroup.name());
     }
 
 

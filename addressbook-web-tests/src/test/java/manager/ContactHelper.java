@@ -101,8 +101,22 @@ public class ContactHelper extends HelperBase {
         for (var row : rows) {
             var checkbox = row.findElement(By.name("selected[]"));
             var id = checkbox.getAttribute("value");
-            contacts.add(new ContactData(id));
+
+            // Вторая ячейка = Last name
+            var lastname = row.findElement(By.cssSelector("td:nth-child(2)")).getText();
+            // Третья ячейка = First name
+            var firstname = row.findElement(By.cssSelector("td:nth-child(3)")).getText();
+            var contact = new ContactData()
+                    .withId(id)
+                    .withFirstname(firstname)
+                    .withLastname(lastname)
+                    .withAddress("")    // можно оставить пустым
+                    .withMobile("")      // или вычитывать, если нужно
+                    .withWork("")
+                    .withEmail("");
+
+            contacts.add(contact);
         }
-        return  contacts;
+        return contacts;
     }
 }
