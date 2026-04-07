@@ -63,6 +63,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("mobile"), contact.mobile());
         type(By.name("work"), contact.work());
         type(By.name("email"), contact.email());
+        attach(By.name("photo"), contact.photo());
     }
 
     public void modifyContact(ContactData contact, ContactData modifiedContact) {

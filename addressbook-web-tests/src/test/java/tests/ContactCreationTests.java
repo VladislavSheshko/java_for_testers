@@ -14,7 +14,7 @@ public class ContactCreationTests extends TestBase {
     @Test
     public void canCreateContact() {
         List<ContactData> oldContacts = app.contact().getList();
-        var contact = new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail");
+        var contact = new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "");
         app.contact().createContact(contact);
         List<ContactData> newContacts = app.contact().getList();
         // Проверяем, что размер списка увеличился на 1
@@ -35,6 +35,15 @@ public class ContactCreationTests extends TestBase {
         // Проверяем, что имя и фамилия совпадают с теми, что передавали
         Assertions.assertEquals(contact.firstname(), newContact.firstname());
         Assertions.assertEquals(contact.lastname(), newContact.lastname());
+    }
+
+    @Test
+    public void canCreateWithPhotoContact() {
+        var contact = new ContactData()
+                .withFirstname(randomString(10))
+                .withLastname(randomString(10))
+                .withPhoto("src/test/resources/images/avatar.png");
+        app.contact().createContact(contact);
     }
 
     //Заполняем только два поля при создании
