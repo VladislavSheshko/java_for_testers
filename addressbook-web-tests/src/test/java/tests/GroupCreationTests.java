@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GroupCreationTests extends TestBase {
@@ -35,19 +36,14 @@ public class GroupCreationTests extends TestBase {
         List<GroupData> oldGroups = app.groups().getList();
         app.groups().createGroup(group);
         List<GroupData> newGroups = app.groups().getList();
-        Assertions.assertEquals(oldGroups.size() + 1, newGroups.size());
-        GroupData createdGroup = null;
-        for (var g : newGroups) {
-            if (g.name().equals(group.name())) {
-                createdGroup = g;
-                break;
-            }
-        }
-        if (createdGroup == null) {
-            throw new AssertionError("Не найдена группа с именем: " + group.name());
-        }
-        // Проверяем, что имя совпадает с переданным
-        Assertions.assertEquals(group.name(), createdGroup.name());
+        Comparator<GroupData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newGroups.sort(compareById);
+        var expectedList = new ArrayList<>(oldGroups);
+        expectedList.add(group.withId(newGroups.get(newGroups.size() - 1).id()).withHeader("").withFooter(""));
+        expectedList.sort(compareById);
+        Assertions.assertEquals(newGroups, expectedList);
     }
 
 
@@ -60,10 +56,10 @@ public class GroupCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("negativeGroupProvider")
     public void canNotCreateGroup(GroupData group) {
-        int groupCount = app.groups().getCount();
+        List<GroupData> oldGroups = app.groups().getList();
         app.groups().createGroup(group);
-        int newGroupCount = app.groups().getCount();
-        Assertions.assertEquals(groupCount, newGroupCount);
+        List<GroupData> newGroups = app.groups().getList();
+        Assertions.assertEquals(newGroups, oldGroups);
     }
 
 /*
@@ -99,4 +95,37 @@ public class GroupCreationTests extends TestBase {
         return result;
     }
  */
+
+    /*
+    понять и найти причины из-за чего не работает данный тест
+    @ParameterizedTest
+    @MethodSource("groupProvider")
+    public void canCreateMultipleGroups(GroupData group) {
+        List<GroupData> oldGroups = app.groups().getList();
+        app.groups().createGroup(group);
+        List<GroupData> newGroups = app.groups().getList();
+        //Проверяем, что размер группы увеличился на 1
+        Assertions.assertEquals(oldGroups.size() + 1, newGroups.size());
+        Comparator<GroupData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newGroups.sort(compareById);
+        var expectedList = new ArrayList<>(oldGroups);
+        expectedList.add(group.withId(newGroups.get(newGroups.size() - 1).id()));
+        expectedList.sort(compareById);
+        Assertions.assertEquals(newGroups, expectedList);
+        GroupData createdGroup = null;
+        for (var g : newGroups) {
+            if (g.name().equals(group.name())) {
+                createdGroup = g;
+                break;
+            }
+        }
+        if (createdGroup == null) {
+            throw new AssertionError("Не найдена группа с именем: " + group.name());
+        }
+        // Проверяем, что имя совпадает с переданным
+        Assertions.assertEquals(group.name(), createdGroup.name());
+    }
+     */
 }

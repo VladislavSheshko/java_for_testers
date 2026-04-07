@@ -65,9 +65,9 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contact.email());
     }
 
-    public void modifyContact(ContactData modifiedContact) {
+    public void modifyContact(ContactData contact, ContactData modifiedContact) {
         openHomePage();
-        selectContact(null);
+        selectContact(contact);
         initContactModification();
         fillContactForm(modifiedContact);
         submitContactModification();
@@ -109,12 +109,7 @@ public class ContactHelper extends HelperBase {
             var contact = new ContactData()
                     .withId(id)
                     .withFirstname(firstname)
-                    .withLastname(lastname)
-                    .withAddress("")    // можно оставить пустым
-                    .withMobile("")      // или вычитывать, если нужно
-                    .withWork("")
-                    .withEmail("");
-
+                    .withLastname(lastname);
             contacts.add(contact);
         }
         return contacts;
