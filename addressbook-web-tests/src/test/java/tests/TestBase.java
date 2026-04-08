@@ -1,8 +1,11 @@
 package tests;
 
 import manager.ApplicationManager;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class TestBase {
@@ -18,16 +21,11 @@ public class TestBase {
         }
     }
 
-
-    //Разобраться почему у меня первая итерация возвращает элемент с пустым именем
-    //на первый взгляд же пустая строка только объявляется, а далее изменяется,
-    //но у меня почему-то с ней первый тест создается, понять причину
-    public static String randomString(int n) {
+    public static String randomFile(String dir) {
+        var fileNames = new File(dir).list();
         var rnd = new Random();
-        var result = "";
-        for (int i = 0; i < n; i++) {
-            result = result + (char) ('a' + rnd.nextInt(26));
-        }
-        return result;
+        Assertions.assertNotNull(fileNames);
+        var index = rnd.nextInt(fileNames.length);
+        return Paths.get(dir, fileNames[index]).toString();
     }
 }
