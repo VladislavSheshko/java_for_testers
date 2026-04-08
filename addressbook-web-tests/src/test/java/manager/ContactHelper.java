@@ -68,8 +68,8 @@ public class ContactHelper extends HelperBase {
 
     public void modifyContact(ContactData contact, ContactData modifiedContact) {
         openHomePage();
-        selectContact(contact);
-        initContactModification();
+        //selectContact(contact);
+        initContactModification(contact);
         fillContactForm(modifiedContact);
         submitContactModification();
         returnToContactPage();
@@ -78,6 +78,7 @@ public class ContactHelper extends HelperBase {
     private void selectContact(ContactData contact) {
         click(By.cssSelector(String.format("input[name='selected[]'][value='%s']", contact.id())));
     }
+
 
     public int getCount() {
         openHomePage();
@@ -92,8 +93,8 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//input[@name='update']"));
     }
 
-    private void initContactModification() {
-        click(By.xpath("//a[contains(@href,'edit.php?id=')]"));
+    private void initContactModification(ContactData contact) {
+        click(By.xpath(String.format("//a[contains(@href,'edit.php?id=%s')]", contact.id())));
     }
 
     public List<ContactData> getList() {
