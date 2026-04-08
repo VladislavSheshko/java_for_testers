@@ -21,7 +21,21 @@ public class HelperBase {
         manager.driver.findElement(locator).clear();
         manager.driver.findElement(locator).sendKeys(text);
     }
+
     protected void attach(By locator, String file) {
-        manager.driver.findElement(locator).sendKeys(Paths.get(file).toAbsolutePath().toString());
+        //manager.driver.findElement(locator).sendKeys(Paths.get(file).toAbsolutePath().toString());
+        var element = manager.driver.findElement(locator);
+        if (file != null && !file.isEmpty() && Paths.get(file).toFile().exists()) {
+            element.sendKeys(Paths.get(file).toAbsolutePath().toString());
+        }
     }
 }
+
+
+
+
+
+
+
+
+
