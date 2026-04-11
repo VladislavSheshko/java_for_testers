@@ -49,6 +49,7 @@ public class Generator {
             throw new IllegalArgumentException("Неизвестный тип данных " + type);
         }
     }
+
     private ArrayList<GroupData> generateGroups() {
         var result = new ArrayList<GroupData>();
         for (int i = 0; i < count; i++) {
@@ -77,7 +78,7 @@ public class Generator {
         } else if ("xml".equals(format)) {
             var mapper = new XmlMapper();
             mapper.writeValue(new File(output), data);
-        }else if ("json".equals(format)) {
+        } else if ("json".equals(format)) {
             JsonMapper mapper = JsonMapper.builder().enable(SerializationFeature.INDENT_OUTPUT).build();
             var json = mapper.writeValueAsString(data);
             try (var writer = new FileWriter(output)) {
