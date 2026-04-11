@@ -2,11 +2,16 @@ package tests;
 
 import common.CommonFunctions;
 import model.ContactData;
+import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,21 +53,20 @@ public class ContactCreationTests extends TestBase {
     }
 
     //Заполняем только два поля при создании
-    public static List<ContactData> contactProvider() {
+    public static List<ContactData> contactProvider() throws IOException {
         var result = new ArrayList<ContactData>();
-        for (var firstname : List.of("", "contact firstname")) {
-            for (var lastname : List.of("", "contact lastname")) {
-
-                result.add(new ContactData()
-                        .withFirstname(firstname)
-                        .withLastname(lastname));
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            result.add(new ContactData()
-                    .withFirstname(CommonFunctions.randomString(i * 10))
-                    .withLastname(CommonFunctions.randomString(i * 10)));
-        }
+//        for (var firstname : List.of("", "contact firstname")) {
+//            for (var lastname : List.of("", "contact lastname")) {
+//
+//                result.add(new ContactData()
+//                        .withFirstname(firstname)
+//                        .withLastname(lastname));
+//            }
+//        }
+        var json = Files.readString(Paths.get("contacts.json"));
+        ObjectMapper mapper = new ObjectMapper();
+        var value = mapper.readValue(json, new TypeReference<List<ContactData>>(){});
+        result.addAll(value);
         return result;
     }
 
