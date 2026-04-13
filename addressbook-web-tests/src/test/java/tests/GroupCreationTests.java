@@ -105,6 +105,22 @@ public class GroupCreationTests extends TestBase {
         expectedList.sort(compareById);
         Assertions.assertEquals(newGroups, expectedList);
     }
+    @ParameterizedTest
+    @MethodSource("singleRandomGroup")
+    public void canCreateGroupHbm(GroupData group) {
+        List<GroupData> oldGroups = app.hbm().getGroupList();
+        app.groups().createGroup(group);
+        List<GroupData> newGroups = app.hbm().getGroupList();
+        Comparator<GroupData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newGroups.sort(compareById);
+        var maxId = newGroups.get(newGroups.size() - 1).id();
+        var expectedList = new ArrayList<>(oldGroups);
+        expectedList.add(group.withId(maxId));
+        expectedList.sort(compareById);
+        Assertions.assertEquals(newGroups, expectedList);
+    }
 /*
     //Было, метод генерации групп для canCreateMultipleGroup
     public static List<String> groupNameProvider() {

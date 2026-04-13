@@ -18,6 +18,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2'
     implementation 'tools.jackson.dataformat:jackson-dataformat-xml:3.1.1'
     implementation 'com.mysql:mysql-connector-j:9.6.0'
+    implementation 'org.hibernate.orm:hibernate-core:7.3.1.Final'
 
 }
 
