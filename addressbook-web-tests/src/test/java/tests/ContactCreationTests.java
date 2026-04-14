@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -50,6 +51,22 @@ public class ContactCreationTests extends TestBase {
                 .withLastname(CommonFunctions.randomString(10))
                 .withPhoto(randomFile("src/test/resources/images"));
         app.contact().createContact(contact);
+    }
+
+    @Test
+    public void canCreateContactInGroup() {
+        var contact = new ContactData()
+                .withFirstname(CommonFunctions.randomString(10))
+                .withLastname(CommonFunctions.randomString(10))
+                .withPhoto(randomFile("src/test/resources/images"));
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "Group name 1", "Group header 1", "Group footer 1"));
+        }
+        var group = app.hbm().getGroupList().get(0);
+        var oldRelated = app.hbm().getContactsInGroup(group);
+        app.contact().createContact(contact, group);
+        var newRelated = app.hbm().getContactsInGroup(group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
 
     //Заполняем только два поля при создании
