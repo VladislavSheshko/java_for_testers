@@ -26,9 +26,22 @@ public class JdbcHelper extends HelperBase {
                         .withHeader(result.getString("group_header"))
                         .withFooter(result.getString("group_footer")));
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return groups;
+    }
+
+    public void checkConsistency() {
+        try (var conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/addressbook", "root", "");
+             var statement = conn.createStatement();
+             var result = statement.executeQuery(
+                     "SELECT * FROM `address_in_groups` ag LEFT JOIN addressbook ab ON ab.id = ag.id WHERE ab.id IS NULL");) {
+            if (result.next()) {
+                throw new IllegalStateException("DB is corrupted");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
