@@ -91,8 +91,14 @@ public class HibernateHelper extends HelperBase {
     }
 
     public List<ContactData> getContactsInGroup(GroupData group) {
-        return  sessionFactory.fromSession(session -> {
-            return convertContactList(session.get(GroupRecord.class, group.id()).contacts);
+        return sessionFactory.fromSession(session -> {
+            String id = group.id();
+            if (id.isEmpty()) id = "0";
+            var groupRecord = session.find(GroupRecord.class, Integer.parseInt(id));
+            if (groupRecord == null) {
+                return new ArrayList<>();
+            }
+            return convertContactList(groupRecord.contacts);
         });
     }
 }
