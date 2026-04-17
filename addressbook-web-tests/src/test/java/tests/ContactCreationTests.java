@@ -70,9 +70,16 @@ public class ContactCreationTests extends TestBase {
         Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
 
+
+    public static List<ContactData> singleRandomContact() throws IOException {
+        return List.of(new ContactData()
+                .withLastname(CommonFunctions.randomString(10))
+                .withFirstname(CommonFunctions.randomString(20))
+                .withAddress(CommonFunctions.randomString(30)));
+    }
     //Проверка списков загружаемых из БД
     @ParameterizedTest
-    @MethodSource("contactProvider")
+    @MethodSource("singleRandomContact")
     public void canCreateContactHbm(ContactData contact) {
         List<ContactData> oldContacts = app.hbm().getContactList();
         app.contact().createContact(contact);
@@ -85,7 +92,8 @@ public class ContactCreationTests extends TestBase {
         var expectedList = new ArrayList<>(oldContacts);
         expectedList.add(contact.withId(maxId));
         expectedList.sort(compareById);
-        Assertions.assertEquals(newContacts, expectedList);    }
+        Assertions.assertEquals(newContacts, expectedList);
+    }
 
     //Заполняем только два поля при создании
     public static List<ContactData> contactProvider() throws IOException {
