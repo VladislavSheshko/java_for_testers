@@ -27,6 +27,7 @@ public class HibernateHelper extends HelperBase {
                 .buildSessionFactory();
     }
 
+    //Группы
     static List<GroupData> convertGroupList(List<GroupRecord> records) {
         List<GroupData> result = new ArrayList<>();
         for (var record : records) {
@@ -47,6 +48,7 @@ public class HibernateHelper extends HelperBase {
         return new GroupRecord(Integer.parseInt(id), data.name(), data.header(), data.footer());
     }
 
+    //Контакты
     static List<ContactData> convertContactList(List<ContactRecord> records) {
         List<ContactData> result = new ArrayList<>();
         for (var record : records) {
@@ -76,6 +78,21 @@ public class HibernateHelper extends HelperBase {
         }));
     }
 
+    public List<ContactData> getContactList() {
+        return convertContactList(sessionFactory.fromSession(session -> {
+            return session.createQuery("from ContactRecord", ContactRecord.class).list();
+        }));
+    }
+
+//    public void createContact(ContactData contact) {
+//        sessionFactory.inSession(session -> {
+//            session.getTransaction().begin();
+//            session.persist(convert(contact));
+//            session.getTransaction().commit();
+//        });
+//    }
+
+    //считает кол-во групп в результате выполнения запроса
     public long getGroupCount() {
         return sessionFactory.fromSession(session -> {
             return session.createQuery("select count (*) from GroupRecord", Long.class).getSingleResult();

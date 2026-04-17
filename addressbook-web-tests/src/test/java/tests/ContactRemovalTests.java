@@ -25,4 +25,21 @@ public class ContactRemovalTests extends TestBase {
         expectedList.remove(index);
         Assertions.assertEquals(newContacts, expectedList);
     }
+
+    //Сравнение списков через БД
+    @Test
+    public void canRemoveContactHbm() {
+        //если таблица контактов пустая, создай новый контакт
+        if (!app.contact().isContactPresent()) {
+            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", null));
+        }
+        List<ContactData> oldContacts = app.hbm().getContactList();
+        var rnd = new Random();
+        var index = rnd.nextInt(oldContacts.size());
+        app.contact().removeContact(oldContacts.get(index));
+        List<ContactData> newContacts = app.hbm().getContactList();
+        var expectedList = new ArrayList<>(oldContacts);
+        expectedList.remove(index);
+        Assertions.assertEquals(newContacts, expectedList);
+    }
 }

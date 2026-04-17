@@ -88,7 +88,7 @@ public class GroupCreationTests extends TestBase {
                 .withHeader(CommonFunctions.randomString(20))
                 .withFooter(CommonFunctions.randomString(30)));
     }
-
+    //Проверка списков загружаемых из БД
     @ParameterizedTest
     @MethodSource("singleRandomGroup")
     public void canCreateGroup(GroupData group) {
@@ -105,6 +105,7 @@ public class GroupCreationTests extends TestBase {
         expectedList.sort(compareById);
         Assertions.assertEquals(newGroups, expectedList);
     }
+    //Проверка списков загружаемых из БД
     @ParameterizedTest
     @MethodSource("singleRandomGroup")
     public void canCreateGroupHbm(GroupData group) {

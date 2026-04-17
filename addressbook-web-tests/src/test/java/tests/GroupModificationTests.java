@@ -39,6 +39,7 @@ public class GroupModificationTests extends TestBase {
         if (app.hbm().getGroupCount() == 0) {
             app.hbm().createGroup(new GroupData("", "Group name 1", "Group header 1", "Group footer 1"));
         }
+        //Получение списков из БД
         List<GroupData> oldGroups = app.hbm().getGroupList();
         var rnd = new Random();
         var index = rnd.nextInt(oldGroups.size());

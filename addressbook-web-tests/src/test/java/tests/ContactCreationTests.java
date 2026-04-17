@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ContactCreationTests extends TestBase {
@@ -68,6 +69,23 @@ public class ContactCreationTests extends TestBase {
         var newRelated = app.hbm().getContactsInGroup(group);
         Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
+
+    //Проверка списков загружаемых из БД
+    @ParameterizedTest
+    @MethodSource("contactProvider")
+    public void canCreateContactHbm(ContactData contact) {
+        List<ContactData> oldContacts = app.hbm().getContactList();
+        app.contact().createContact(contact);
+        List<ContactData> newContacts = app.hbm().getContactList();
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newContacts.sort(compareById);
+        var maxId = newContacts.get(newContacts.size() - 1).id();
+        var expectedList = new ArrayList<>(oldContacts);
+        expectedList.add(contact.withId(maxId));
+        expectedList.sort(compareById);
+        Assertions.assertEquals(newContacts, expectedList);    }
 
     //Заполняем только два поля при создании
     public static List<ContactData> contactProvider() throws IOException {
