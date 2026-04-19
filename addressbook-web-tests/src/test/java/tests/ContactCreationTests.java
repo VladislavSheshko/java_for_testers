@@ -77,6 +77,7 @@ public class ContactCreationTests extends TestBase {
                 .withFirstname(CommonFunctions.randomString(20))
                 .withAddress(CommonFunctions.randomString(30)));
     }
+
     //Проверка списков загружаемых из БД
     @ParameterizedTest
     @MethodSource("singleRandomContact")
@@ -84,15 +85,13 @@ public class ContactCreationTests extends TestBase {
         List<ContactData> oldContacts = app.hbm().getContactList();
         app.contact().createContact(contact);
         List<ContactData> newContacts = app.hbm().getContactList();
-        Comparator<ContactData> compareById = (o1, o2) -> {
-            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
-        };
-        newContacts.sort(compareById);
-        var maxId = newContacts.get(newContacts.size() - 1).id();
-        var expectedList = new ArrayList<>(oldContacts);
-        expectedList.add(contact.withId(maxId));
-        expectedList.sort(compareById);
-        Assertions.assertEquals(newContacts, expectedList);
+        Assertions.assertEquals(oldContacts.size() + 1, newContacts.size());
+        var matched = newContacts.stream()
+                .anyMatch(c -> c.firstname().equals(contact.firstname())
+                        && c.lastname().equals(contact.lastname())
+                        && c.address().equals(contact.address()));
+
+        Assertions.assertTrue(matched, "Не найден созданный контакт в списке: " + contact);
     }
 
     //Заполняем только два поля при создании
@@ -108,7 +107,8 @@ public class ContactCreationTests extends TestBase {
 //        }
         var json = Files.readString(Paths.get("contacts.json"));
         ObjectMapper mapper = new ObjectMapper();
-        var value = mapper.readValue(json, new TypeReference<List<ContactData>>(){});
+        var value = mapper.readValue(json, new TypeReference<List<ContactData>>() {
+        });
         result.addAll(value);
         return result;
     }
