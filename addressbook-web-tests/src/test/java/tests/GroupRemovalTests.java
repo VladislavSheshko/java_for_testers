@@ -42,7 +42,7 @@ public class GroupRemovalTests extends TestBase {
         Assertions.assertEquals(newGroups, expectedList);
     }
 
-    //Удаление всех существующих групп
+    //Удаление всех существующих групп через UI
     @Test
     void canRemoveAllGroupsAtOnce() {
         if (app.groups().getCount() == 0) {
@@ -50,5 +50,15 @@ public class GroupRemovalTests extends TestBase {
         }
         app.groups().removeAllGroups();
         Assertions.assertEquals(0, app.groups().getCount());
+    }
+
+    //Удаление всех существующих групп через БД
+    @Test
+    void canRemoveAllGroupsAtOnceHbm() {
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "Group name 1", "Group header 1", "Group footer 1"));
+        }
+        app.groups().removeAllGroups();
+        Assertions.assertEquals(0, app.hbm().getGroupCount());
     }
 }

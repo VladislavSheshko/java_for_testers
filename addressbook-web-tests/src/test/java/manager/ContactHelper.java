@@ -66,10 +66,37 @@ public class ContactHelper extends HelperBase {
         removeSelectedContact();
         returnToContactPage();
     }
+    public void removeContactFromGroup(ContactData contact, GroupData group) {
+        openHomePage();
+        var groupSelect = new Select(manager.driver.findElement(By.name("group")));
+        groupSelect.selectByVisibleText(group.name());
+        selectContact(contact);
+        removeSelectedContactFromGroup();
+        openHomePage();
+    }
+
+    private void removeSelectedContactFromGroup() {
+        click(By.name("remove"));
+    }
 
     private void removeSelectedContact() {
         click(By.name("delete"));
     }
+
+    public void addContactToGroup(ContactData contact) {
+        openHomePage();
+        selectContact(contact);
+        addContact();
+        openHomePage();
+    }
+
+    private void addContact() {
+        click(By.name("to_group"));
+        var select = new Select(manager.driver.findElement(By.name("to_group")));
+        select.selectByIndex(0);
+        click(By.name("add"));
+    }
+
 
     private void fillContactForm(ContactData contact) {
         type(By.name("firstname"), contact.firstname());
@@ -130,5 +157,13 @@ public class ContactHelper extends HelperBase {
             contacts.add(contact);
         }
         return contacts;
+    }
+
+    // метод для работы с группами при добавлении контактов через UI
+    public List<ContactData> getContactsInGroupFromUi(String groupName) {
+        var select = new Select(manager.driver.findElement(By.name("group")));
+        select.selectByVisibleText(groupName);
+        // возвращаем список контактов, отфильтрованных по группе
+        return getList();
     }
 }

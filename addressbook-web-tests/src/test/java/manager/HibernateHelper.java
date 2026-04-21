@@ -7,6 +7,8 @@ import model.GroupData;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +108,7 @@ public class HibernateHelper extends HelperBase {
             session.getTransaction().commit();
         });
     }
-
+    // метод для работы через БД
     public List<ContactData> getContactsInGroup(GroupData group) {
         return sessionFactory.fromSession(session -> {
             String id = group.id();

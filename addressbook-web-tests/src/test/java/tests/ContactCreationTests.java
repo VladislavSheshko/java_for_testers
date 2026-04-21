@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 public class ContactCreationTests extends TestBase {
 
@@ -54,6 +54,7 @@ public class ContactCreationTests extends TestBase {
         app.contact().createContact(contact);
     }
 
+    //Добавление контакта в группу при создании, и сравнение списков через БД
     @Test
     public void canCreateContactInGroup() {
         var contact = new ContactData()
@@ -68,6 +69,47 @@ public class ContactCreationTests extends TestBase {
         app.contact().createContact(contact, group);
         var newRelated = app.hbm().getContactsInGroup(group);
         Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+    }
+
+    //Добавление контакта в группу через UI, а сравнение списков через БД
+    @Test
+    public void canAddContactToGroup() {
+        // если таблица контактов пустая, создай новый контакт через UI
+        if (!app.contact().isContactPresent()) {
+            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", ""));
+        }
+        // если групп в БД нет, создаём группу через Hibernate
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "Group name 1", "Group header 1", "Group footer 1"));
+        }
+        GroupData group = app.hbm().getGroupList().get(0);
+        //получаем список контактов в группе В БД до добавления
+        var oldContactsInGroup = app.hbm().getContactsInGroup(group);
+        //получаем список контактов через UI (для выбора)
+        List<ContactData> allContacts = app.contact().getList();
+        if (allContacts.isEmpty()) {
+            Assertions.fail("Список контактов пуст после подготовки");
+        }
+        var rnd = new Random();
+        var index = rnd.nextInt(allContacts.size());
+        var contactToAdd = allContacts.get(index);
+        //добавляем контакт в группу через UI
+        app.contact().addContactToGroup(contactToAdd);
+        //снова получаем список контактов в группе В БД
+        var newContactsInGroup = app.hbm().getContactsInGroup(group);
+        //проверяем, что в группе В БД стало на 1 контакт больше
+        Assertions.assertEquals(
+                oldContactsInGroup.size() + 1,
+                newContactsInGroup.size(),
+                "Группа в БД должна содержать на 1 контакт больше"
+        );
+        //проверяем, что контакт действительно есть в группе
+        var contactFoundInGroup = newContactsInGroup.stream()
+                .anyMatch(c -> c.id().equals(contactToAdd.id()));
+        Assertions.assertTrue(
+                contactFoundInGroup,
+                "Добавленный контакт должен присутствовать в группе: " + contactToAdd
+        );
     }
 
 
