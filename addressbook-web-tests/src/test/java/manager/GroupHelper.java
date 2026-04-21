@@ -2,6 +2,7 @@ package manager;
 
 import model.GroupData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +94,14 @@ public class GroupHelper extends HelperBase {
             checkbox.click();
         }
     }
+
+    //такой же метод, как и выше, но в функциональном стиле
+//    private void selectAllGroups() {
+//        // Для каждого элемента списка checkboxes будет вызван метод click описанный в классе WebElement
+//        manager.driver
+//                .findElements(By.name("selected[]"))
+//                .forEach(WebElement::click);
+//    }
 
     public List<GroupData> getList() {
         openGroupPage();
