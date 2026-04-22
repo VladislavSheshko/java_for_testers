@@ -48,7 +48,7 @@ public class ContactHelper extends HelperBase {
         returnToContactPage();
     }
 
-    private void selectGroup(GroupData group) {
+    private void  selectGroup(GroupData group) {
         new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
     }
 
@@ -83,10 +83,20 @@ public class ContactHelper extends HelperBase {
         click(By.name("delete"));
     }
 
+    public void addContactToGroup(ContactData contact, GroupData group) {
+        openHomePage();
+        selectContact(contact);
+        var select = new Select(manager.driver.findElement(By.name("to_group")));
+        select.selectByValue(group.id());
+        click(By.name("add"));
+        openHomePage();
+    }
     public void addContactToGroup(ContactData contact) {
         openHomePage();
         selectContact(contact);
-        addContact();
+        var select = new Select(manager.driver.findElement(By.name("to_group")));
+        select.selectByIndex(0);
+        click(By.name("add"));
         openHomePage();
     }
 

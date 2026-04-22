@@ -4,11 +4,10 @@ import manager.hbm.ContactRecord;
 import manager.hbm.GroupRecord;
 import model.ContactData;
 import model.GroupData;
+import model.Pair;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +107,7 @@ public class HibernateHelper extends HelperBase {
             session.getTransaction().commit();
         });
     }
+
     // метод для работы через БД
     public List<ContactData> getContactsInGroup(GroupData group) {
         return sessionFactory.fromSession(session -> {
@@ -118,6 +118,68 @@ public class HibernateHelper extends HelperBase {
                 return new ArrayList<>();
             }
             return convertContactList(groupRecord.contacts);
+        });
+    }
+
+    //поиск контактов не находящихся в группе
+    public List<ContactData> getContactsNotInGroup(GroupData group) {
+        return sessionFactory.fromSession(session -> {
+            String groupId = group.id();
+            if (groupId.isEmpty()) groupId = "0";
+
+            var allContacts = session.createQuery("from ContactRecord", ContactRecord.class).list();
+            var groupRecord = session.find(GroupRecord.class, Integer.parseInt(groupId));
+            var contactsInGroup = groupRecord == null ? List.of() : groupRecord.contacts;
+
+            return allContacts.stream()
+                    .filter(contact -> !contactsInGroup.contains(contact))
+                    .map(HibernateHelper::convert)
+                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        });
+    }
+
+    public Pair<ContactData, GroupData> findOrCreateContactGroupPair() {
+        return sessionFactory.fromSession(session -> {
+            //Все группы
+            var groupRecords = session.createQuery("from GroupRecord", GroupRecord.class).list();
+            if (groupRecords.isEmpty()) {
+                var groupData = new GroupData("", "Group name 1", "Group header 1", "Group footer 1");
+                session.getTransaction().begin();
+                var newGroup = new GroupRecord(
+                        Integer.parseInt(groupData.id()),
+                        groupData.name(),
+                        groupData.header(),
+                        groupData.footer()
+                );
+                session.persist(newGroup);
+                session.getTransaction().commit();
+                groupRecords.add(newGroup);
+            }
+            //Все контакты
+            var contactRecords = session.createQuery("from ContactRecord", ContactRecord.class).list();
+            if (contactRecords.isEmpty()) {
+                var contactData = new ContactData()
+                        .withFirstname("Владислав")
+                        .withLastname("Шешко");
+                session.getTransaction().begin();
+                var newContact = new ContactRecord(
+                        0, contactData.firstname(), contactData.lastname(), ""
+                );
+                session.persist(newContact);
+                session.getTransaction().commit();
+                contactRecords.add(newContact);
+            }
+            //Ищем подходящую пару через getContactsNotInGroup
+            for (var groupRecord : groupRecords) {
+                var group = convert(groupRecord);
+                var contactsNotInGroup = getContactsNotInGroup(group);
+
+                if (!contactsNotInGroup.isEmpty()) {
+                    return new Pair<>(contactsNotInGroup.get(0), group);
+                }
+            }
+            //Если не нашли, берём любой контакт и группу
+            return new Pair<>(convert(contactRecords.get(0)), convert(groupRecords.get(0)));
         });
     }
 }
