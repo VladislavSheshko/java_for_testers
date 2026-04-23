@@ -140,46 +140,27 @@ public class HibernateHelper extends HelperBase {
 
     public Pair<ContactData, GroupData> findOrCreateContactGroupPair() {
         return sessionFactory.fromSession(session -> {
-            //Все группы
+            // все группы из БД
             var groupRecords = session.createQuery("from GroupRecord", GroupRecord.class).list();
-            if (groupRecords.isEmpty()) {
-                var groupData = new GroupData("", "Group name 1", "Group header 1", "Group footer 1");
-                session.getTransaction().begin();
-                var newGroup = new GroupRecord(
-                        Integer.parseInt(groupData.id()),
-                        groupData.name(),
-                        groupData.header(),
-                        groupData.footer()
-                );
-                session.persist(newGroup);
-                session.getTransaction().commit();
-                groupRecords.add(newGroup);
-            }
-            //Все контакты
+            // все контакты из БД
             var contactRecords = session.createQuery("from ContactRecord", ContactRecord.class).list();
-            if (contactRecords.isEmpty()) {
-                var contactData = new ContactData()
-                        .withFirstname("Владислав")
-                        .withLastname("Шешко");
-                session.getTransaction().begin();
-                var newContact = new ContactRecord(
-                        0, contactData.firstname(), contactData.lastname(), ""
-                );
-                session.persist(newContact);
-                session.getTransaction().commit();
-                contactRecords.add(newContact);
-            }
-            //Ищем подходящую пару через getContactsNotInGroup
+            // ищем подходящую пару (контакт NOT в группе)
             for (var groupRecord : groupRecords) {
                 var group = convert(groupRecord);
                 var contactsNotInGroup = getContactsNotInGroup(group);
-
                 if (!contactsNotInGroup.isEmpty()) {
                     return new Pair<>(contactsNotInGroup.get(0), group);
                 }
             }
-            //Если не нашли, берём любой контакт и группу
-            return new Pair<>(convert(contactRecords.get(0)), convert(groupRecords.get(0)));
+            // если подходящей пары не нашлось, берём первый контакт и первую группу
+            if (!contactRecords.isEmpty() && !groupRecords.isEmpty()) {
+                return new Pair<>(
+                        convert(contactRecords.get(0)),
+                        convert(groupRecords.get(0))
+                );
+            }
+            // если вообще нет ни одной группы и контакта, возвращаем null
+            return new Pair<>(null, null);
         });
     }
 }

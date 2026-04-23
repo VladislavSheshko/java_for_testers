@@ -74,22 +74,36 @@ public class ContactCreationTests extends TestBase {
     //Добавление контакта в группу через UI, а сравнение списков через БД
     @Test
     public void canAddContactToGroup() {
-        //Получаем подходящую пару: контакт NOT в группе
+        // 1. если групп в БД нет, создаём группу через UI
+        if (app.hbm().getGroupCount() == 0) {
+            app.groups().createGroup(new GroupData("", "Group name 1", "Group header 1", "Group footer 1"));
+        }
+        // если контактов нет, создаём контакт через UI
+        if (!app.contact().isContactPresent()) {
+            app.contact().createContact(
+                    new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "")
+            );
+        }
+        //ищем подходящую пару: контакт NOT в группе
         var pair = app.hbm().findOrCreateContactGroupPair();
+        if (pair == null) {
+            Assertions.fail("Не найдено ни одной группы и контакта для создания пары");
+        }
         ContactData contactToAdd = pair.left();
         GroupData group = pair.right();
-        //Список контактов в группе в БД до добавления
+        // список контактов в группе в БД до добавления
         var oldContactsInGroup = app.hbm().getContactsInGroup(group);
+        // добавляем контакт в группу через UI
         app.contact().addContactToGroup(contactToAdd, group);
-        //После добавления
+        // после добавления список контактов в группе в БД
         var newContactsInGroup = app.hbm().getContactsInGroup(group);
-        //Проверка: +1 контакт
+        // проверка, что в группе в БД стало на 1 контакт больше
         Assertions.assertEquals(
                 oldContactsInGroup.size() + 1,
                 newContactsInGroup.size(),
                 "Группа в БД должна содержать на 1 контакт больше"
         );
-        //Проверка: контакт действительно добавлен
+        //проверка, что контакт действительно добавлен в группу
         var contactFound = newContactsInGroup.stream()
                 .anyMatch(c -> c.id().equals(contactToAdd.id()));
         Assertions.assertTrue(
