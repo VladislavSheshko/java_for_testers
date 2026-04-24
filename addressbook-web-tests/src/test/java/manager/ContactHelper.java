@@ -169,13 +169,7 @@ public class ContactHelper extends HelperBase {
         }
         return contacts;
     }
-    // метод для работы с группами при добавлении контактов через UI
-    public List<ContactData> getContactsInGroupFromUi(String groupName) {
-        var select = new Select(manager.driver.findElement(By.name("group")));
-        select.selectByVisibleText(groupName);
-        // возвращаем список контактов, отфильтрованных по группе
-        return getList();
-    }
+
     public Pair<ContactData, GroupData> createAndGetContactGroupPair() {
         //создаём группу и контакт через UI
         var newGroupName = "TestGroup_" + System.currentTimeMillis();

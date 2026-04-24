@@ -142,8 +142,6 @@ public class HibernateHelper extends HelperBase {
         return sessionFactory.fromSession(session -> {
             // все группы из БД
             var groupRecords = session.createQuery("from GroupRecord", GroupRecord.class).list();
-            // все контакты из БД
-            var contactRecords = session.createQuery("from ContactRecord", ContactRecord.class).list();
             // ищем подходящую пару (контакт NOT в группе)
             for (var groupRecord : groupRecords) {
                 var group = convert(groupRecord);
