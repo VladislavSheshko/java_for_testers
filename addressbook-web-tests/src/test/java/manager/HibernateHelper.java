@@ -152,13 +152,6 @@ public class HibernateHelper extends HelperBase {
                     return new Pair<>(contactsNotInGroup.get(0), group);
                 }
             }
-            // если подходящей пары не нашлось, берём первый контакт и первую группу
-            if (!contactRecords.isEmpty() && !groupRecords.isEmpty()) {
-                return new Pair<>(
-                        convert(contactRecords.get(0)),
-                        convert(groupRecords.get(0))
-                );
-            }
             // если вообще нет ни одной группы и контакта, возвращаем null
             return new Pair<>(null, null);
         });

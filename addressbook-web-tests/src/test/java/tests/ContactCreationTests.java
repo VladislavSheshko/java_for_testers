@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class ContactCreationTests extends TestBase {
 
@@ -86,11 +85,16 @@ public class ContactCreationTests extends TestBase {
         }
         //ищем подходящую пару: контакт NOT в группе
         var pair = app.hbm().findOrCreateContactGroupPair();
-        if (pair == null) {
-            Assertions.fail("Не найдено ни одной группы и контакта для создания пары");
+        ContactData contactToAdd;
+        GroupData group;
+        if (pair == null || pair.left() == null || pair.right() == null) {
+            var newPair = app.contact().createAndGetContactGroupPair();
+            contactToAdd = newPair.left();
+            group = newPair.right();
+        } else {
+            contactToAdd = pair.left();
+            group = pair.right();
         }
-        ContactData contactToAdd = pair.left();
-        GroupData group = pair.right();
         // список контактов в группе в БД до добавления
         var oldContactsInGroup = app.hbm().getContactsInGroup(group);
         // добавляем контакт в группу через UI

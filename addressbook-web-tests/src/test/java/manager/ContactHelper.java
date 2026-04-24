@@ -2,6 +2,7 @@ package manager;
 
 import model.ContactData;
 import model.GroupData;
+import model.Pair;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
@@ -168,12 +169,40 @@ public class ContactHelper extends HelperBase {
         }
         return contacts;
     }
-
     // метод для работы с группами при добавлении контактов через UI
     public List<ContactData> getContactsInGroupFromUi(String groupName) {
         var select = new Select(manager.driver.findElement(By.name("group")));
         select.selectByVisibleText(groupName);
         // возвращаем список контактов, отфильтрованных по группе
         return getList();
+    }
+    public Pair<ContactData, GroupData> createAndGetContactGroupPair() {
+        //создаём группу и контакт через UI
+        var newGroupName = "TestGroup_" + System.currentTimeMillis();
+        var newGroupData = new GroupData("", newGroupName, "", "");
+        manager.groups().createGroup(newGroupData);
+        var newContactData = new ContactData(
+                "",
+                "TestFirstName",
+                "TestLastName",
+                "TestAddress",
+                "",
+                "",
+                "",
+                ""
+        );
+        manager.contact().createContact(newContactData);
+        //получаем контакт из БД
+        var allContacts = manager.hbm().getContactList();
+        var contactFromDb = allContacts.stream()
+                .filter(c -> c.firstname().equals("TestFirstName") && c.lastname().equals("TestLastName"))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Контакт не найден в БД"));
+        //получаем группу из БД
+        var groupFromDb = manager.hbm().getGroupList().stream()
+                .filter(g -> g.name().equals(newGroupData.name()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Новая группа не найдена в БД"));
+        return new Pair<>(contactFromDb, groupFromDb);
     }
 }
