@@ -15,7 +15,7 @@ public class ContactModificationTests extends TestBase {
     public void canModifyContact() {
         //если таблица контактов пустая, создай новый контакт
         if (!app.contact().isContactPresent()) {
-            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "", ""));
+            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "", "", "", ""));
         }
         List<ContactData> oldContacts = app.contact().getList();
         var rnd = new Random();
@@ -42,7 +42,7 @@ public class ContactModificationTests extends TestBase {
     public void canModifyContactHbm() {
         //если таблица контактов пустая, создай новый контакт
         if (!app.contact().isContactPresent()) {
-            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "", ""));
+            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "", "", "", ""));
         }
         List<ContactData> oldContacts = app.hbm().getContactList();
         var rnd = new Random();
