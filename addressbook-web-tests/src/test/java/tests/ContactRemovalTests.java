@@ -15,7 +15,7 @@ public class ContactRemovalTests extends TestBase {
     public void canRemoveContact() {
         //если таблица контактов пустая, создай новый контакт
         if (!app.contact().isContactPresent()) {
-            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", null));
+            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", null, ""));
         }
         List<ContactData> oldContacts = app.contact().getList();
         var rnd = new Random();
@@ -32,7 +32,7 @@ public class ContactRemovalTests extends TestBase {
     public void canRemoveContactHbm() {
         //если таблица контактов пустая, создай новый контакт
         if (!app.contact().isContactPresent()) {
-            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", null));
+            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", null, ""));
         }
         List<ContactData> oldContacts = app.hbm().getContactList();
         var rnd = new Random();
@@ -49,7 +49,7 @@ public class ContactRemovalTests extends TestBase {
         //если таблица контактов пустая, создаём контакт через UI
         if (!app.contact().isContactPresent()) {
             app.contact().createContact(
-                    new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "")
+                    new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "", "")
             );
         }
         //если групп в БД нет, создаём группу через Hibernate

@@ -1,4 +1,4 @@
-package ru.stqa.geometry.figures.collections;
+package ru.stqa.collections;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

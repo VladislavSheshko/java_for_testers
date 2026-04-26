@@ -21,7 +21,7 @@ public class ContactCreationTests extends TestBase {
     @Test
     public void canCreateContact() {
         List<ContactData> oldContacts = app.contact().getList();
-        var contact = new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "");
+        var contact = new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "", "");
         app.contact().createContact(contact);
         List<ContactData> newContacts = app.contact().getList();
         // Проверяем, что размер списка увеличился на 1
@@ -80,7 +80,7 @@ public class ContactCreationTests extends TestBase {
         // если контактов нет, создаём контакт через UI
         if (!app.contact().isContactPresent()) {
             app.contact().createContact(
-                    new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "")
+                    new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", "", "")
             );
         }
         //ищем подходящую пару: контакт NOT в группе

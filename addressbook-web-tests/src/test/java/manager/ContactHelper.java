@@ -183,8 +183,8 @@ public class ContactHelper extends HelperBase {
                 "",
                 "",
                 "",
-                ""
-        );
+                "",
+                "");
         manager.contact().createContact(newContactData);
         //получаем контакт из БД
         var allContacts = manager.hbm().getContactList();
@@ -198,5 +198,10 @@ public class ContactHelper extends HelperBase {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Новая группа не найдена в БД"));
         return new Pair<>(contactFromDb, groupFromDb);
+    }
+
+    public String getPhones(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[6]", contact.id()))).getText();
     }
 }

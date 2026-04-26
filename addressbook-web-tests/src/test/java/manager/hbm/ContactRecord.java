@@ -15,7 +15,9 @@ public class ContactRecord {
     public String firstname;
     public String lastname;
     public String address;
-
+    public String home;
+    public String mobile;
+    public String work;
 
     public ContactRecord() {}
 
