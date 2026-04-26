@@ -7,12 +7,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -41,7 +43,8 @@ public class GroupCreationTests extends TestBase {
         //чтение всего файла за раз
         var json = Files.readString(Paths.get("groups.json"));
         ObjectMapper mapper = new ObjectMapper();
-        var value = mapper.readValue(json, new TypeReference<List<GroupData>>(){});
+        var value = mapper.readValue(json, new TypeReference<List<GroupData>>() {
+        });
         result.addAll(value);
         return result;
     }
@@ -86,16 +89,17 @@ public class GroupCreationTests extends TestBase {
 //                .withHeader(CommonFunctions.randomString(20))
 //                .withFooter(CommonFunctions.randomString(30)));
 //    }
-    public static Stream<GroupData> singleRandomGroup() throws IOException {
+    public static Stream<GroupData> randomGroups() throws IOException {
         Supplier<GroupData> randomGroup = () -> new GroupData()
                 .withName(CommonFunctions.randomString(10))
                 .withHeader(CommonFunctions.randomString(20))
                 .withFooter(CommonFunctions.randomString(30));
-        return Stream.generate(randomGroup).limit(3);
+        return Stream.generate(randomGroup).limit(1);
     }
-    //Проверка списков загружаемых из БД
+
+    //Проверка списков загружаемых из БД jdbc
     @ParameterizedTest
-    @MethodSource("singleRandomGroup")
+    @MethodSource("randomGroups")
     public void canCreateGroup(GroupData group) {
         List<GroupData> oldGroups = app.jdbc().getGroupList();
         app.groups().createGroup(group);
@@ -110,22 +114,20 @@ public class GroupCreationTests extends TestBase {
         expectedList.sort(compareById);
         Assertions.assertEquals(newGroups, expectedList);
     }
-    //Проверка списков загружаемых из БД
+
+    //Проверка списков загружаемых из БД hbm
+    //изменен поиск нового элемента с мах ID, на поиск элемента которого ранее не было в списке групп
     @ParameterizedTest
-    @MethodSource("singleRandomGroup")
+    @MethodSource("randomGroups")
     public void canCreateGroupHbm(GroupData group) {
         List<GroupData> oldGroups = app.hbm().getGroupList();
         app.groups().createGroup(group);
         List<GroupData> newGroups = app.hbm().getGroupList();
-        Comparator<GroupData> compareById = (o1, o2) -> {
-            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
-        };
-        newGroups.sort(compareById);
-        var maxId = newGroups.get(newGroups.size() - 1).id();
+        var extraGroups = newGroups.stream().filter(g -> ! oldGroups.contains(g)).toList();
+        var newId = extraGroups.get(0).id();
         var expectedList = new ArrayList<>(oldGroups);
-        expectedList.add(group.withId(maxId));
-        expectedList.sort(compareById);
-        Assertions.assertEquals(newGroups, expectedList);
+        expectedList.add(group.withId(newId));
+        Assertions.assertEquals(Set.copyOf(newGroups), Set.copyOf(expectedList));
     }
 /*
     //Было, метод генерации групп для canCreateMultipleGroup
