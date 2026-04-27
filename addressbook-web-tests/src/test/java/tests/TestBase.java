@@ -16,7 +16,6 @@ public class TestBase {
 
     protected static ApplicationManager app;
 
-
     @BeforeEach
     public void setUp() throws IOException {
         if (app == null) {
