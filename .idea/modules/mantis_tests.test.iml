@@ -60,6 +60,7 @@
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio-jvm:3.16.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.10.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.10.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.protobuf:protobuf-java:4.31.1" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="mantis_tests.main" />
 </module>
