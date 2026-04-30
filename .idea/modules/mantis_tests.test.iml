@@ -10,9 +10,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="mantis_tests.main" />
+    <orderEntry type="library" name="Gradle: org.eclipse.angus:angus-mail:2.1.0-M1" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter:5.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.seleniumhq.selenium:selenium-java:4.41.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp-urlconnection:5.3.0" level="project" />
+    <orderEntry type="library" name="Gradle: jakarta.mail:jakarta.mail-api:2.2.0-M1" level="project" />
+    <orderEntry type="library" name="Gradle: jakarta.activation:jakarta.activation-api:2.2.0-M1" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-params:5.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.seleniumhq.selenium:selenium-devtools-v143:4.41.0" level="project" />
@@ -58,9 +61,9 @@
     <orderEntry type="library" name="Gradle: io.opentelemetry:opentelemetry-sdk-logs:1.59.0" level="project" />
     <orderEntry type="library" name="Gradle: io.opentelemetry:opentelemetry-common:1.59.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio-jvm:3.16.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.eclipse.angus:angus-activation:2.1.0-M1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.10.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.10.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.google.protobuf:protobuf-java:4.31.1" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="mantis_tests.main" />
 </module>

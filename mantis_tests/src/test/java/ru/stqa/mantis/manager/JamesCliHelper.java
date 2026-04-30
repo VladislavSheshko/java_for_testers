@@ -1,10 +1,6 @@
 package ru.stqa.mantis.manager;
 
-
-import org.openqa.selenium.io.CircularOutputStream;
-
 import java.io.File;
-import java.io.IOException;
 
 public class JamesCliHelper extends HelperBase {
 
@@ -26,7 +22,7 @@ public class JamesCliHelper extends HelperBase {
         }
     }
 }
-//
+// устаревшая конструкция, работала в старых версиях selenium
 //CommandLine cmd = new CommandLine(
 //        "java", "-cp", "\"james-server-jpa-app.lib/*\"",
 //        "org.apache.james.cli.ServerCmd",
