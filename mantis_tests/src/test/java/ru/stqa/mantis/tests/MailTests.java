@@ -19,7 +19,7 @@ public class MailTests extends TestBase {
     //получаем почту с ожиданием
     @Test
     void canReceiveEmail2() {
-        var messages = app.mail().receive("user1@localhost", "password", Duration.ofSeconds(60));
+        var messages = app.mail().receive("user1@localhost", "password", Duration.ofSeconds(10));
         Assertions.assertEquals(1, messages.size());
         System.out.println(messages);
     }

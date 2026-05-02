@@ -1,6 +1,8 @@
 package ru.stqa.mantis.manager;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -16,6 +18,7 @@ public class ApplicationManager {
     private HttpSessionHelper httpSessionHelper;
     private JamesCliHelper jamesCliHelper;
     private MailHelper mailHelper;
+    private AccountHelper accountHelper;
 
     public void init(String browser, Properties properties) {
         this.browser = browser;
@@ -67,7 +70,23 @@ public class ApplicationManager {
         return mailHelper;
     }
 
+    public AccountHelper accountHelper() {
+        if (accountHelper == null) {
+            accountHelper = new AccountHelper(this);
+        }
+        return accountHelper;
+    }
+
     public String property(String name) {
         return properties.getProperty(name);
+    }
+
+    protected boolean isElementPresent(By locator) {
+        try {
+            driver.findElement(locator);
+            return true;
+        }catch (NoSuchElementException exception) {
+            return false;
+        }
     }
 }
