@@ -70,7 +70,7 @@ public class ApplicationManager {
         return mailHelper;
     }
 
-    public AccountHelper accountHelper() {
+    public AccountHelper account() {
         if (accountHelper == null) {
             accountHelper = new AccountHelper(this);
         }

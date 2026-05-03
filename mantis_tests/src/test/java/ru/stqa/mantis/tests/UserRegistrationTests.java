@@ -2,6 +2,7 @@ package ru.stqa.mantis.tests;
 
 import org.junit.jupiter.api.Test;
 import ru.stqa.mantis.common.CommonFunctions;
+import ru.stqa.mantis.model.AccountData;
 
 public class UserRegistrationTests extends TestBase {
 
@@ -17,5 +18,12 @@ public class UserRegistrationTests extends TestBase {
         // извлекаем ссылку из письма
         // проходим по ссылке и завершаем регистрацию (браузер)
         // проверяем, что пользователь может залогиниться (HttpSessionHelper)
+    }
+
+    @Test
+    void canCreateContact() {
+        app.session().login("administrator", "root");
+        var account = new AccountData("Vlad", "Sheshko", "1@localhost", "", true, false);
+      app.account().createAccount(account);
     }
 }
