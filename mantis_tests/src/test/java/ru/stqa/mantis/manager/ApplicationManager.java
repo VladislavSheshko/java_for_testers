@@ -49,6 +49,7 @@ public class ApplicationManager {
         return sessionHelper;
     }
 
+
     public HttpSessionHelper http() {
         if (httpSessionHelper == null) {
             httpSessionHelper = new HttpSessionHelper(this);

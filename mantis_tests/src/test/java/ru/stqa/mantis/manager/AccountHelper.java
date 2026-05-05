@@ -20,13 +20,13 @@ public class AccountHelper extends HelperBase {
 
     private void openManagePage() {
         //if (!manager.isElementPresent(By.xpath("//a[contains(text(), 'Users')]"))) {
-            click(By.linkText("Manage"));
-      //  }
+        click(By.linkText("Manage"));
+        //  }
     }
 
     private void openUsersPage() {
         click(By.linkText("Users"));
-       // click(By.xpath("//a[contains(text(), 'Users')]"));
+        // click(By.xpath("//a[contains(text(), 'Users')]"));
     }
 
     private void initAccountCreation() {
@@ -43,4 +43,22 @@ public class AccountHelper extends HelperBase {
         click(By.xpath("//input[@type='submit' and @value='Create User']"));
     }
 
+    public void accountActivation() {
+        settingPassword();
+       // newUserAuthorization();
+    }
+
+    private void newUserAuthorization() {
+        type(By.name("username"), "Vlad2");
+        click(By.cssSelector("input[type='submit']"));
+        type(By.name("password"), "password");
+        click(By.cssSelector("input[type='submit']"));
+
+    }
+
+    private void settingPassword() {
+        type(By.name("password"), "password");
+        type(By.name("password_confirm"), "password");
+        click(By.cssSelector(".submit-button button[type='submit']"));
+    }
 }
