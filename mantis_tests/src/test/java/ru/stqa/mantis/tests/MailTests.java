@@ -24,7 +24,7 @@ public class MailTests extends TestBase {
         System.out.println(messages);
     }
 
-    //удаление почтового адреса
+    //удаление писем с почтового адреса
     @Test
     void canDrainInbox() {
         app.mail().drain("user1@localhost", "password");
