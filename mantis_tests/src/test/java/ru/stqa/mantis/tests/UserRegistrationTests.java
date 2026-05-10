@@ -39,20 +39,20 @@ public class UserRegistrationTests extends TestBase {
         app.session().login("Vlad2", "password");
     }
 
-    //Используется jamesApi
+    //Используется REST API в создание почты и аккаунта
     @Test
     void canCreateUser() {
         //var email = String.format("%s@localhost", username);
         // авторизоваться через UI
         app.session().login("administrator", "root");
         // создать пользователя (адрес) на почтовом сервере (JamesHelper)
-        app.jamesApi().addUser("9@localhost",
+        app.jamesApi().addUser("10@localhost",
                 "password");
         // заполняем форму создания и отправляем (браузер)
-        var account = new AccountData("Vlad2", "Sheshko", "9@localhost", "", true, false);
+        var account = new AccountData("Vlad2", "Sheshko", "10@localhost", "", true, false);
         app.accountApi().createAccount(account);
         // ждем почту (MailHelper)
-        var messages = app.mail().receive("9@localhost", "password", Duration.ofSeconds(10));
+        var messages = app.mail().receive("10@localhost", "password", Duration.ofSeconds(10));
         // извлекаем ссылку из письма
         var text = messages.get(0).content();
         var pattern = Pattern.compile("http://\\S*");

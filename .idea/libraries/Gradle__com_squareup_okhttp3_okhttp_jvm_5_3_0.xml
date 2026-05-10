@@ -5,6 +5,8 @@
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp-jvm/5.3.0/6c64103d4b99cf95a4498872adc1075de580a30b/okhttp-jvm-5.3.0.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp-jvm/5.3.0/2ae1e1be46d3d0cb4074459280d32b0a276eb2c1/okhttp-jvm-5.3.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

@@ -4,6 +4,7 @@ import okhttp3.*;
 import ru.stqa.mantis.model.AccountData;
 
 import java.io.IOException;
+import java.net.CookieManager;
 
 public class AccountApiHelper extends HelperBase {
 
@@ -12,6 +13,9 @@ public class AccountApiHelper extends HelperBase {
 
     public AccountApiHelper(ApplicationManager manager) {
         super(manager);
+        client = new OkHttpClient.Builder()
+                .cookieJar(new JavaNetCookieJar(new CookieManager()))
+                .build();
     }
 
     public void createAccount(AccountData account) {
@@ -38,7 +42,8 @@ public class AccountApiHelper extends HelperBase {
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
-                .url(String.format("%s/users/", manager.property("mantis.apiBaseUrl")))
+                .url(String.format("%s/users", manager.property("mantis.apiBaseUrl")))
+                .addHeader("Authorization", manager.property("apiKey"))
                 .post(body)
                 .build();
 
