@@ -7,10 +7,18 @@ import ru.stqa.mantis.model.IssueData;
 public class IssueCreationTests extends TestBase {
 
     @Test
-    void canCreateIssue() {
+    void canCreateIssueRest() {
         app.rest().createIssue(new IssueData()
                 .withSummary(CommonFunctions.randomString(10))
                 .withDescription(CommonFunctions.randomString(30))
                 .withProject(1L));
     }
+    @Test
+    void canCreateIssueSoap() {
+        app.soap().createIssue(new IssueData()
+                .withSummary(CommonFunctions.randomString(10))
+                .withDescription(CommonFunctions.randomString(30))
+                .withProject(1L));
+    }
+
 }
