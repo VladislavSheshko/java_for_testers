@@ -14,4 +14,12 @@ public class JamesTests extends TestBase {
                 "password");
 
     }
+
+    @Test
+    void canCreateUserApi() throws IOException, InterruptedException {
+        app.jamesApi().addUser(
+                String.format("%s@localhost", CommonFunctions.randomString(7)),
+                "password");
+
+    }
 }

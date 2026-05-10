@@ -38,6 +38,7 @@ public class UserRegistrationTests extends TestBase {
         // проверяем, что пользователь может залогиниться (HttpSessionHelper)
         app.session().login("Vlad2", "password");
     }
+
     //Используется jamesApi
     @Test
     void canCreateUser() {
@@ -45,13 +46,13 @@ public class UserRegistrationTests extends TestBase {
         // авторизоваться через UI
         app.session().login("administrator", "root");
         // создать пользователя (адрес) на почтовом сервере (JamesHelper)
-        app.jamesApi().addUser("8@localhost",
+        app.jamesApi().addUser("9@localhost",
                 "password");
         // заполняем форму создания и отправляем (браузер)
-        var account = new AccountData("Vlad2", "Sheshko", "8@localhost", "", true, false);
-        app.account().createAccount(account);
+        var account = new AccountData("Vlad2", "Sheshko", "9@localhost", "", true, false);
+        app.accountApi().createAccount(account);
         // ждем почту (MailHelper)
-        var messages = app.mail().receive("8@localhost", "password", Duration.ofSeconds(10));
+        var messages = app.mail().receive("9@localhost", "password", Duration.ofSeconds(10));
         // извлекаем ссылку из письма
         var text = messages.get(0).content();
         var pattern = Pattern.compile("http://\\S*");
@@ -72,6 +73,6 @@ public class UserRegistrationTests extends TestBase {
     void canCreateContact() {
         app.session().login("administrator", "root");
         var account = new AccountData("Vlad", "Sheshko", "1@localhost", "", true, false);
-      app.account().createAccount(account);
+        app.account().createAccount(account);
     }
 }

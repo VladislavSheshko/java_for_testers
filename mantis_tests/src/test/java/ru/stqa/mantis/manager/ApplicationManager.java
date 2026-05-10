@@ -20,6 +20,8 @@ public class ApplicationManager {
     private MailHelper mailHelper;
     private AccountHelper accountHelper;
     private JamesApiHelper jamesApiHelper;
+    private RestApiHelper restApiHelper;
+    private AccountApiHelper accountApiHelper;
 
     public void init(String browser, Properties properties) {
         this.browser = browser;
@@ -86,9 +88,13 @@ public class ApplicationManager {
         return accountHelper;
     }
 
-    public String property(String name) {
-        return properties.getProperty(name);
+    public AccountApiHelper accountApi() {
+        if (accountApiHelper == null) {
+            accountApiHelper = new AccountApiHelper(this);
+        }
+        return accountApiHelper;
     }
+
 
     protected boolean isElementPresent(By locator) {
         try {
@@ -98,4 +104,17 @@ public class ApplicationManager {
             return false;
         }
     }
+
+    public RestApiHelper rest() {
+        if (restApiHelper == null) {
+            restApiHelper = new RestApiHelper(this);
+        }
+        return restApiHelper;
+    }
+
+    public String property(String name) {
+        return properties.getProperty(name);
+    }
+
+
 }
