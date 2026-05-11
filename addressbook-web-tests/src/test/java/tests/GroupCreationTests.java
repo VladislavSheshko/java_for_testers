@@ -1,6 +1,7 @@
 package tests;
 
 import common.CommonFunctions;
+import io.qameta.allure.Allure;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -123,11 +124,13 @@ public class GroupCreationTests extends TestBase {
         List<GroupData> oldGroups = app.hbm().getGroupList();
         app.groups().createGroup(group);
         List<GroupData> newGroups = app.hbm().getGroupList();
-        var extraGroups = newGroups.stream().filter(g -> ! oldGroups.contains(g)).toList();
+        var extraGroups = newGroups.stream().filter(g -> !oldGroups.contains(g)).toList();
         var newId = extraGroups.get(0).id();
         var expectedList = new ArrayList<>(oldGroups);
         expectedList.add(group.withId(newId));
-        Assertions.assertEquals(Set.copyOf(newGroups), Set.copyOf(expectedList));
+        Allure.step("Validating results", step -> {
+            Assertions.assertEquals(Set.copyOf(newGroups), Set.copyOf(expectedList));
+        });
     }
 /*
     //Было, метод генерации групп для canCreateMultipleGroup
