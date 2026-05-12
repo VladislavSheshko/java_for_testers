@@ -1,8 +1,12 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Owner;
 import model.ContactData;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,6 +16,10 @@ import java.util.Random;
 public class ContactRemovalTests extends TestBase {
 
     @Test
+    @DisplayName("Удаление случайного контакта через UI")
+    @Description("Проверяет удаление случайного контакта из списка через пользовательский интерфейс. " +
+            "Если список пуст - создает тестовый контакт.")
+    @Owner("Владислав Шешко")
     public void canRemoveContact() {
         //если таблица контактов пустая, создай новый контакт
         if (!app.contact().isContactPresent()) {
@@ -29,6 +37,11 @@ public class ContactRemovalTests extends TestBase {
 
     //Сравнение списков через БД
     @Test
+    @DisplayName("Удаление случайного контакта через Hibernate")
+    @Description("Проверяет удаление случайного контакта с проверкой результата через Hibernate (БД). " +
+            "Сравнение списков до и после удаления.")
+    @Owner("Владислав Шешко")
+    @Tag("hbm")
     public void canRemoveContactHbm() {
         //если таблица контактов пустая, создай новый контакт
         if (!app.contact().isContactPresent()) {
@@ -45,6 +58,11 @@ public class ContactRemovalTests extends TestBase {
     }
 
     @Test
+    @DisplayName("Удаление контакта из группы")
+    @Description("Проверяет удаление случайного контакта из группы. Автоматически создает группу и контакт, " +
+            "если они отсутствуют. Проверка через Hibernate.")
+    @Owner("Владислав Шешко")
+    @Tag("group")
     public void canRemoveContactFromGroup() {
         //если таблица контактов пустая, создаём контакт через UI
         if (!app.contact().isContactPresent()) {

@@ -2,8 +2,10 @@ package tests;
 
 import common.CommonFunctions;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import tools.jackson.core.type.TypeReference;
@@ -53,6 +55,8 @@ public class GroupCreationTests extends TestBase {
     //В метод передается Объект
     @ParameterizedTest
     @MethodSource("groupProvider")
+    @DisplayName("Создание новой группы")
+    @Description("Проверяет создание группы через UI")
     public void canCreateMultipleGroups(GroupData group) {
         List<GroupData> oldGroups = app.groups().getList();
         app.groups().createGroup(group);
@@ -120,6 +124,8 @@ public class GroupCreationTests extends TestBase {
     //изменен поиск нового элемента с мах ID, на поиск элемента которого ранее не было в списке групп
     @ParameterizedTest
     @MethodSource("randomGroups")
+    @DisplayName("Создание группы через HBM")
+    @Description("Проверяет создание группы через Hibernate")
     public void canCreateGroupHbm(GroupData group) {
         List<GroupData> oldGroups = app.hbm().getGroupList();
         app.groups().createGroup(group);
