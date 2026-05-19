@@ -70,6 +70,25 @@ public class ContactHelper extends HelperBase {
         removeSelectedContact();
         returnToContactPage();
     }
+
+    public void removeAllContact() {
+        openHomePage();
+        //selectAllContacts(); //выбор всех контактов через чек-боксы
+        selectAllContacts2();
+        removeSelectedContact();
+        returnToContactPage();
+    }
+
+    private void selectAllContacts() {
+        var checkboxes = manager.driver.findElements(By.name("selected[]"));
+        for (var checkbox : checkboxes) {
+            checkbox.click();
+        }
+    }
+    private void selectAllContacts2() {
+        manager.driver.findElement(By.id("MassCB")).click();
+    }
+
     public void removeContactFromGroup(ContactData contact, GroupData group) {
         openHomePage();
         var groupSelect = new Select(manager.driver.findElement(By.name("group")));
@@ -228,4 +247,5 @@ public class ContactHelper extends HelperBase {
         return manager.driver.findElement(By.xpath(
                 String.format("//input[@id='%s']/../../td[5]", contact.id()))).getText();
     }
+
 }

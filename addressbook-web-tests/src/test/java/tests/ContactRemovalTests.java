@@ -35,6 +35,18 @@ public class ContactRemovalTests extends TestBase {
         Assertions.assertEquals(newContacts, expectedList);
     }
 
+    @Test
+    @DisplayName("Удаление всех контактов")
+    @Owner("Владислав Шешко")
+    public void canRemoveAllContactAtOnce() {
+        //если таблица контактов пустая, создай новый контакт
+        if (!app.contact().isContactPresent()) {
+            app.contact().createContact(new ContactData("", "Владислав", "Шешко", "Челябинск", "+7", "QA", "1@mail", null, "", "", ""));
+        }
+        app.contact().removeAllContact();
+        Assertions.assertEquals(0, app.contact().getCount());
+    }
+
     //Сравнение списков через БД
     @Test
     @DisplayName("Удаление случайного контакта через Hibernate")
