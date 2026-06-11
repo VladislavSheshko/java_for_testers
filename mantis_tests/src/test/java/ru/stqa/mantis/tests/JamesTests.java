@@ -14,12 +14,17 @@ public class JamesTests extends TestBase {
                 "password");
 
     }
-
+    //создание нового почтового адреса
     @Test
     void canCreateUserApi() throws IOException, InterruptedException {
         app.jamesApi().addUser(
                 String.format("%s@localhost", CommonFunctions.randomString(7)),
                 "password");
+    }
 
+    //удаление почтового адреса
+    @Test
+    void canDeleteUserApi() throws IOException, InterruptedException {
+        app.jamesApi().deleteUser("qusuugp@localhost");
     }
 }

@@ -28,4 +28,19 @@ public class JamesApiHelper extends HelperBase {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteUser(String email) {
+        Request request = new Request.Builder()
+                .url(String.format("%s/users/%s", manager.property("james.apiBaseUrl"), email))
+                .delete()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("Unexpected code " + response.code() + ": " + response);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
