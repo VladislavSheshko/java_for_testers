@@ -15,6 +15,11 @@ public class SessionHelper extends HelperBase {
         click(By.cssSelector("input[type='submit']"));
     }
 
+    public void logout() {
+        click(By.cssSelector("li.grey a.dropdown-toggle"));
+        click(By.xpath("//li[contains(@class,'grey')]//a[normalize-space()='Logout']"));
+    }
+
     public boolean isLoggedIn() {
         return isElementPresent(By.cssSelector("span.user-info"));
     }

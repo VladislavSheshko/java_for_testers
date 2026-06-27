@@ -1,6 +1,7 @@
 package ru.stqa.mantis.manager;
 
 import okhttp3.*;
+import org.openqa.selenium.By;
 import ru.stqa.mantis.model.AccountData;
 
 import java.io.IOException;
@@ -55,4 +56,22 @@ public class AccountApiHelper extends HelperBase {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteAccount() {
+        click(By.xpath("//a[.//span[normalize-space()='Manage']]"));
+        //переход на вкладку пользователей
+        click(By.linkText("Users"));
+        //выбор нужного пользователя из списка
+        click(By.xpath("//table//a[normalize-space()='Vlad4']"));
+        //удаление выбранного пользователя
+        click(By.cssSelector("#manage-user-delete-form button"));
+        //подтверждение удаления
+        click(By.cssSelector("form.center input[value='Delete Account']"));
+    }
+     /* метод для выбора имени из списка к удалению по переменной, а не конкретному значению
+    public void selectUser(String userName) {
+        var select = new Select(manager.driver().findElement(By.name("user")));
+        select.selectByVisibleText(userName);
+    }
+      */
 }

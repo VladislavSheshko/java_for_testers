@@ -25,6 +25,6 @@ public class JamesTests extends TestBase {
     //удаление почтового адреса
     @Test
     void canDeleteUserApi() throws IOException, InterruptedException {
-        app.jamesApi().deleteUser("qusuugp@localhost");
+        app.jamesApi().deleteUser("12@localhost");
     }
 }

@@ -78,4 +78,40 @@ public class UserRegistrationTests extends TestBase {
         var account = new AccountData("Vlad", "Sheshko", "1@localhost", "", true, false);
         app.account().createAccount(account);
     }
+
+    // тест после себя подчищает все данные
+    @Test
+    void canCreateUserAll() {
+        // авторизоваться через UI
+        app.session().login("administrator", "root");
+        // создать пользователя (адрес) на почтовом сервере (JamesHelper)
+        app.jamesApi().addUser("12@localhost",
+                "password");
+        // заполняем форму создания и отправляем (браузер)
+        var account = new AccountData("Vlad4", "Sheshko", "12@localhost", "", true, false);
+        app.accountApi().createAccount(account);
+        // ждем почту (MailHelper)
+        var messages = app.mail().receive("12@localhost", "password", Duration.ofSeconds(10));
+        // извлекаем последнюю ссылку из письма
+        var text = messages.get(messages.size() - 1).content();
+        var pattern = Pattern.compile("http://\\S*");
+        var matcher = pattern.matcher(text);
+        String url = "";
+        if (matcher.find()) {
+            url = text.substring(matcher.start(), matcher.end());
+        }
+        // проходим по ссылке и завершаем регистрацию (браузер)
+        app.driver().get(url);
+        app.account().accountActivation();
+        // проверяем, что пользователь может залогиниться (HttpSessionHelper)
+        app.session().login("Vlad4", "password");
+        // выполнить логаут
+        app.session().logout();
+        // авторизоваться через админа
+        app.session().login("administrator", "root");
+        // удалить только что созданную учетную запись
+        app.accountApi().deleteAccount();
+        // выполняем удаление почтового адреса
+        app.jamesApi().deleteUser("12@localhost");
+    }
 }
