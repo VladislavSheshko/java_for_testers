@@ -29,12 +29,7 @@ public class UserRegistrationTests extends TestBase {
         // ждем почту (MailHelper)
         var messages = app.mail().receive(email, password, Duration.ofSeconds(10));
         // извлекаем ссылку из письма
-        var text = messages.get(0).content();
-        var pattern = Pattern.compile("http://\\S*");
-        var matcher = pattern.matcher(text);
-        assertTrue(matcher.find(), "Confirmation link not found in email");
-
-        var url = matcher.group();
+        var url = messages.get(0).getConfirmationLink();
         // проходим по ссылке и завершаем регистрацию (браузер)
         app.driver().get(url);
         app.account().accountActivation();
@@ -52,43 +47,8 @@ public class UserRegistrationTests extends TestBase {
         app.jamesApi().deleteUser(email);
     }
 
-    //Используется REST API в создание почты и аккаунта
-    @Test
-    void canCreateUser() {
-        //var email = String.format("%s@localhost", username);
-        // авторизоваться через UI
-        app.session().login("administrator", "root");
-        // создать пользователя (адрес) на почтовом сервере (JamesHelper)
-        app.jamesApi().addUser("10@localhost",
-                "password");
-        // заполняем форму создания и отправляем (браузер)
-        var account = new AccountData("Vlad2", "Sheshko", "10@localhost", "", true, false);
-        app.accountApi().createAccount(account);
-        // ждем почту (MailHelper)
-        var messages = app.mail().receive("10@localhost", "password", Duration.ofSeconds(10));
-        // извлекаем ссылку из письма
-        var text = messages.get(0).content();
-        var pattern = Pattern.compile("http://\\S*");
-        var matcher = pattern.matcher(text);
-        String url = "";
-        if (matcher.find()) {
-            url = text.substring(matcher.start(), matcher.end());
-            //System.out.println(url);
-        }
-        // проходим по ссылке и завершаем регистрацию (браузер)
-        app.driver().get(url);
-        app.account().accountActivation();
-        // проверяем, что пользователь может залогиниться (HttpSessionHelper)
-        app.session().login("Vlad2", "password");
-    }
 
-    @Test
-    void canCreateContact() {
-        app.session().login("administrator", "root");
-        var account = new AccountData("Vlad", "Sheshko", "1@localhost", "", true, false);
-        app.account().createAccount(account);
-    }
-
+    // Используется REST API в создание почты и аккаунта
     // тест после себя подчищает все данные
     @Test
     void canCreateUserAll() {
@@ -103,13 +63,7 @@ public class UserRegistrationTests extends TestBase {
         // ждем почту (MailHelper)
         var messages = app.mail().receive("12@localhost", "password", Duration.ofSeconds(10));
         // извлекаем последнюю ссылку из письма
-        var text = messages.get(messages.size() - 1).content();
-        var pattern = Pattern.compile("http://\\S*");
-        var matcher = pattern.matcher(text);
-        String url = "";
-        if (matcher.find()) {
-            url = text.substring(matcher.start(), matcher.end());
-        }
+        var url = messages.get(messages.size() - 1).getConfirmationLink();
         // проходим по ссылке и завершаем регистрацию (браузер)
         app.driver().get(url);
         app.account().accountActivation();
@@ -123,5 +77,12 @@ public class UserRegistrationTests extends TestBase {
         app.accountApi().deleteAccount("Vlad4");
         // выполняем удаление почтового адреса
         app.jamesApi().deleteUser("12@localhost");
+    }
+
+    @Test
+    void canCreateContact() {
+        app.session().login("administrator", "root");
+        var account = new AccountData("Vlad", "Sheshko", "1@localhost", "", true, false);
+        app.account().createAccount(account);
     }
 }
