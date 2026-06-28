@@ -40,6 +40,16 @@ public class UserRegistrationTests extends TestBase {
         app.account().accountActivation();
         // проверяем, что пользователь может залогиниться (HttpSessionHelper)
         app.session().login(userName, password);
+
+        //добавляем шаги для удаления почтового адреса и учетной записи
+        // выполнить логаут
+        app.session().logout();
+        // авторизоваться через админа
+        app.session().login("administrator", "root");
+        // удалить только что созданную учетную запись
+        app.accountApi().deleteAccount(userName);
+        // выполняем удаление почтового адреса
+        app.jamesApi().deleteUser(email);
     }
 
     //Используется REST API в создание почты и аккаунта
@@ -110,7 +120,7 @@ public class UserRegistrationTests extends TestBase {
         // авторизоваться через админа
         app.session().login("administrator", "root");
         // удалить только что созданную учетную запись
-        app.accountApi().deleteAccount();
+        app.accountApi().deleteAccount("Vlad4");
         // выполняем удаление почтового адреса
         app.jamesApi().deleteUser("12@localhost");
     }

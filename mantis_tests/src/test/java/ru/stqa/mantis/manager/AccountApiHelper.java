@@ -57,12 +57,12 @@ public class AccountApiHelper extends HelperBase {
         }
     }
 
-    public void deleteAccount() {
+    public void deleteAccount(String userName) {
         click(By.xpath("//a[.//span[normalize-space()='Manage']]"));
         //переход на вкладку пользователей
         click(By.linkText("Users"));
         //выбор нужного пользователя из списка
-        click(By.xpath("//table//a[normalize-space()='Vlad4']"));
+        click(By.xpath(String.format("//table//a[normalize-space()='%s']", userName)));
         //удаление выбранного пользователя
         click(By.cssSelector("#manage-user-delete-form button"));
         //подтверждение удаления
